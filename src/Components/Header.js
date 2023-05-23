@@ -1,9 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../images/Логотип.svg";
 import "../index.css";
 
 function Header({ isLoggedIn, onSignOut, headerEmail }) {
+  const location = useLocation();
+
   return (
     <header className="header">
       <Link to="/">
@@ -19,12 +21,15 @@ function Header({ isLoggedIn, onSignOut, headerEmail }) {
         </div>
       ) : (
         <div>
-          <Link to="/sign-in" className="header__link">
-            Войти
-          </Link>
-          <Link to="/sign-up" className="header__link">
-            Регистрация
-          </Link>
+          {location.pathname === "/sign-in" ? (
+            <Link to="/sign-up" className="header__link">
+              Регистрация
+            </Link>
+          ) : (
+            <Link to="/sign-in" className="header__link">
+              Войти
+            </Link>
+          )}
         </div>
       )}
     </header>
@@ -32,3 +37,12 @@ function Header({ isLoggedIn, onSignOut, headerEmail }) {
 }
 
 export default Header;
+
+
+
+
+
+
+
+
+
