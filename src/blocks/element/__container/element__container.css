@@ -1,0 +1,12 @@
+.element__container {
+  position: relative;
+  max-width: 282px;
+  min-height: 365,4;
+  background-color: #fff;
+  border-radius: 10px;
+  margin: 0;
+  overflow: hidden;
+}
+
+
+

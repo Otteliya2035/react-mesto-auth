@@ -1,0 +1,11 @@
+.profile__avatar-btn-icon {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 26px;
+    height: 26px;
+    background-image: url("../../../images/Редактировать-профиль.svg");
+    background-size: cover;
+  }
