@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import authApi from "../utils/authApi";
 import InfoTooltip from "../Components/InfoTooltip";
 
-const Login = () => {
+const Login = ({ setIsLoggedIn, handleLogout }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showInfoTooltip, setShowInfoTooltip] = useState(false);
@@ -13,11 +13,9 @@ const Login = () => {
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
-
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // Вызов API для проверки учетных данных и выполнения входа
@@ -27,17 +25,22 @@ const Login = () => {
         // Успешный вход
         setIsLoginSuccessful(true);
         setShowInfoTooltip(true);
+        setIsLoggedIn(true);
         //  перенаправление на другую страницу
-        navigate("/main", { replace: true });
+        navigate("/", { replace: true });
       })
       .catch((error) => {
         // Неудачный вход
         setIsLoginSuccessful(false);
         setShowInfoTooltip(true);
+        setIsLoggedIn(false);
         console.log("Ошибка входа:", error);
       });
   };
+  const handleLogoutClick = () => {
+    handleLogout();
 
+  };
   return (
     <div className="login">
       <h2 className="auth__title">Вход</h2>
@@ -70,6 +73,7 @@ const Login = () => {
         isOpen={showInfoTooltip}
         onClose={() => setShowInfoTooltip(false)}
         isSuccess={isLoginSuccessful}
+        onClick={handleLogoutClick}
       />
     </div>
   );

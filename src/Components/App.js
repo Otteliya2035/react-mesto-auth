@@ -13,7 +13,6 @@ import Register from "../Components/Register";
 import Login from "../Components/Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoTooltip from "../Components/InfoTooltip";
-
   import authApi from "../utils/authApi";
 
 function App() {
@@ -80,8 +79,6 @@ function App() {
     setIsRegistrationSuccessful(isSuccess);
     setShowInfoTooltip(true);
   };
-
-
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -193,32 +190,18 @@ function App() {
     }
   }, []);
 
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-
-        <Header onSignOut={handleLogout} headerEmail={headerEmail}  />
+        <Header isLoggedIn={isLoggedIn} onSignOut={handleLogout} headerEmail={headerEmail}  />
         <Routes>
-
-        <Route path="/sign-up" element={<div className="login">  <Login  /></div>} />
-
-        <Route path="/sign-in" element={<div className="register"><Register /></div>} />
-        <Route
-          path="/"
-          element={
-            isLoggedIn ? (
-              <Navigate to="/main" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        <Route path="/sign-up" element={ <Login setIsLoggedIn={setIsLoggedIn} handleLogout={handleLogout}  />} />
+        <Route path="/sign-in" element={ <Register />} />
       <Route
-            path="/main"
+            path="/"
             element={
               <ProtectedRoute
-                component={Main}
+                element={Main}
                 isLoggedIn={isLoggedIn}
                 cards={cards}
                 onCardClick={handleCardClick}

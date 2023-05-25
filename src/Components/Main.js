@@ -12,13 +12,13 @@ function Main({
   onCardLike,
   onCardDelete,
   cards,
-  isLoggedIn,
+ 
 }) {
   const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="main">
-       {isLoggedIn ? (
+
       <section className="profile">
         <button className="profile__avatar-btn" onClick={onEditAvatar}>
           <img
@@ -45,7 +45,7 @@ function Main({
           onClick={onAddPlace}
         ></button>
       </section>
-      ) : null}
+
       <section className="elements">
         {cards.map((card) => (
           <Card

@@ -2,11 +2,13 @@
 import React, { useState } from "react";
 import { Link} from "react-router-dom";
 import authApi from "../utils/authApi";
+import InfoTooltip from "../Components/InfoTooltip";
 
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -17,6 +19,7 @@ function Register() {
       .then(() => {
         // Регистрация прошла успешно
         console.log("Регистрация успешна!");
+        setRegistrationSuccessful(true);
         // Очищаем поля формы
         setEmail("");
         setPassword("");
@@ -68,7 +71,13 @@ function Register() {
         </Link>
       </div>
     </form>
-
+    {isRegistrationSuccessful && (
+        <InfoTooltip
+          isOpen={true}
+          onClose={() => setRegistrationSuccessful(false)}
+          isSuccess={true}
+        />
+      )}
     </div>
   );
 }
