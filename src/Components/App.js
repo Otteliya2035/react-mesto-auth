@@ -13,7 +13,7 @@ import Register from "../Components/Register";
 import Login from "../Components/Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoTooltip from "../Components/InfoTooltip";
-  import authApi from "../utils/authApi";
+import authApi from "../utils/authApi";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
@@ -72,9 +72,9 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [showInfoTooltip, setShowInfoTooltip] = useState(false);
-  const [isRegistrationSuccessful, setIsRegistrationSuccessful] = useState(false);
+  const [isRegistrationSuccessful, setIsRegistrationSuccessful] =
+    useState(false);
 
-  // Функция для отображения InfoTooltip с указанием успешной или неудачной регистрации
   const showRegistrationInfo = (isSuccess) => {
     setIsRegistrationSuccessful(isSuccess);
     setShowInfoTooltip(true);
@@ -136,7 +136,7 @@ function App() {
     setSelectedCard(null);
   }
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [headerEmail, setHeaderEmail] = useState('');
+  const [headerEmail, setHeaderEmail] = useState("");
 
   const handleRegister = (email, password) => {
     authApi
@@ -163,41 +163,35 @@ function App() {
       .catch((error) => {
         console.log(error);
         setIsLoggedIn(false);
-        setHeaderEmail('');
+        setHeaderEmail("");
       });
   };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
-    setHeaderEmail('');
+    setHeaderEmail("");
   };
-
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      authApi.setToken(token);
-      api.setToken(token);
-
-      authApi
-        .checkTokenValidity()
-        .then((data) => {
-          setCurrentUser(data.user);
-          setIsLoggedIn(true);
-        })
-        .catch((error) => console.log(error));
-    }
-  }, []);
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header isLoggedIn={isLoggedIn} onSignOut={handleLogout} headerEmail={headerEmail}  />
+        <Header
+          isLoggedIn={isLoggedIn}
+          onSignOut={handleLogout}
+          headerEmail={headerEmail}
+        />
         <Routes>
-        <Route path="/sign-up" element={ <Login setIsLoggedIn={setIsLoggedIn} handleLogout={handleLogout}  />} />
-        <Route path="/sign-in" element={ <Register />} />
-      <Route
+          <Route
+            path="/sign-up"
+            element={
+              <Login
+                setIsLoggedIn={setIsLoggedIn}
+                handleLogout={handleLogout}
+                setHeaderEmail={setHeaderEmail}
+              />
+            }
+          />
+          <Route path="/sign-in" element={<Register />} />
+          <Route
             path="/"
             element={
               <ProtectedRoute
@@ -213,7 +207,7 @@ function App() {
               />
             }
           />
-             </Routes>
+        </Routes>
         <Footer />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <EditProfilePopup
@@ -232,11 +226,11 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
         />
-         <InfoTooltip
-        isOpen={showInfoTooltip}
-        onClose={closeAllPopups}
-        isSuccess={isRegistrationSuccessful}
-      />
+        <InfoTooltip
+          isOpen={showInfoTooltip}
+          onClose={closeAllPopups}
+          isSuccess={isRegistrationSuccessful}
+        />
 
         <div className="popup popup_delete-card">
           <div className="popup__container">
@@ -254,4 +248,3 @@ function App() {
   );
 }
 export default App;
-

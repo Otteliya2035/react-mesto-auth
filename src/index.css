@@ -56,7 +56,6 @@
 @import url('../src/blocks/auth/__button/auth__button.css');
 @import url('../src/blocks/auth/__form/auth__form.css');
 @import url('../src/blocks/auth/__login-link/auth__login-link.css');
-@import url('../src/blocks/login/__title/login__title.css');
 @import url('../src/blocks/popup/__icon/popup__icon.css');
 @import url('../src/blocks/popup/__icon/__icon_success/popup_icon_success.css');
 @import url('../src/blocks/popup/__icon/__icon_error/popup__icon_error.css');

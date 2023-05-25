@@ -35,12 +35,3 @@ function Header({ isLoggedIn, onSignOut, headerEmail }) {
 }
 
 export default Header;
-
-
-
-
-
-
-
-
-

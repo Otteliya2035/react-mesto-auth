@@ -1,9 +1,7 @@
-
 import React, { useState } from "react";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import authApi from "../utils/authApi";
 import InfoTooltip from "../Components/InfoTooltip";
-
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -12,20 +10,14 @@ function Register() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Выполняем регистрацию
     authApi
       .register(email, password)
       .then(() => {
-        // Регистрация прошла успешно
-        console.log("Регистрация успешна!");
         setRegistrationSuccessful(true);
-        // Очищаем поля формы
         setEmail("");
         setPassword("");
       })
       .catch((error) => {
-        // Обработка ошибки регистрации
         console.log("Ошибка регистрации:", error);
       });
   };
@@ -66,12 +58,12 @@ function Register() {
           Зарегистрироваться
         </button>
         <div className="auth__signin">
-        <Link to="/sign-in"><p className="auth__login-link">  Уже зарегистрированы? Войти</p>
-
-        </Link>
-      </div>
-    </form>
-    {isRegistrationSuccessful && (
+          <Link to="/sign-in">
+            <p className="auth__login-link"> Уже зарегистрированы? Войти</p>
+          </Link>
+        </div>
+      </form>
+      {isRegistrationSuccessful && (
         <InfoTooltip
           isOpen={true}
           onClose={() => setRegistrationSuccessful(false)}

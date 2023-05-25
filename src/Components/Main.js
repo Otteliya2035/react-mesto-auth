@@ -12,13 +12,11 @@ function Main({
   onCardLike,
   onCardDelete,
   cards,
- 
 }) {
   const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="main">
-
       <section className="profile">
         <button className="profile__avatar-btn" onClick={onEditAvatar}>
           <img

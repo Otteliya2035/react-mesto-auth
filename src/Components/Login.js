@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import authApi from "../utils/authApi";
 import InfoTooltip from "../Components/InfoTooltip";
 
-const Login = ({ setIsLoggedIn, handleLogout }) => {
+const Login = ({ setIsLoggedIn, handleLogout, setHeaderEmail }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showInfoTooltip, setShowInfoTooltip] = useState(false);
@@ -18,19 +18,16 @@ const Login = ({ setIsLoggedIn, handleLogout }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Вызов API для проверки учетных данных и выполнения входа
     authApi
       .login(email, password)
       .then(() => {
-        // Успешный вход
         setIsLoginSuccessful(true);
         setShowInfoTooltip(true);
         setIsLoggedIn(true);
-        //  перенаправление на другую страницу
+        setHeaderEmail(email);
         navigate("/", { replace: true });
       })
       .catch((error) => {
-        // Неудачный вход
         setIsLoginSuccessful(false);
         setShowInfoTooltip(true);
         setIsLoggedIn(false);
@@ -39,7 +36,6 @@ const Login = ({ setIsLoggedIn, handleLogout }) => {
   };
   const handleLogoutClick = () => {
     handleLogout();
-
   };
   return (
     <div className="login">

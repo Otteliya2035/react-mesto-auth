@@ -1,14 +1,11 @@
-.auth__button{
-    min-width: 358px;
-   min-height: 50px;
-   background: #FFFFFF;
-border-radius: 2px;
-margin-top: 216px;
-font-size: 18px;
-line-height: 22px;
-text-align: center;
-color: #000000;
-
+.auth__button {
+  min-width: 358px;
+  min-height: 50px;
+  background: #ffffff;
+  border-radius: 2px;
+  margin-top: 216px;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  color: #000000;
 }
-
-
