@@ -14,12 +14,33 @@ import Login from "../Components/Login";
 import { ProtectedRoute } from "./ProtectedRoute";
 import InfoTooltip from "../Components/InfoTooltip";
 import authApi from "../utils/authApi";
+import { useNavigate } from "react-router-dom";
+
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [headerEmail, setHeaderEmail] = useState("");
+  const navigate = useNavigate();
+
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      authApi
+        .checkToken(token)
+        .then((data) => {
+          setIsLoggedIn(true);
+          setHeaderEmail(data.email);
+        })
+        .catch((error) => {
+          console.log(error);
+          setIsLoggedIn(false);
+          setHeaderEmail("");
+        });
+    }
+
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([userData, initialCards]) => {
         setCurrentUser(userData);
@@ -65,10 +86,10 @@ function App() {
   }
 
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    React.useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+    useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    React.useState(false);
+    useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [showInfoTooltip, setShowInfoTooltip] = useState(false);
@@ -79,6 +100,8 @@ function App() {
     setIsRegistrationSuccessful(isSuccess);
     setShowInfoTooltip(true);
   };
+
+
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -135,22 +158,20 @@ function App() {
     setShowInfoTooltip(false);
     setSelectedCard(null);
   }
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [headerEmail, setHeaderEmail] = useState("");
-
-  const handleRegister = (email, password) => {
+  function handleRegister(email, password) {
     authApi
       .register(email, password)
       .then(() => {
-        setIsRegistrationSuccessful(true);
-        setShowInfoTooltip(true);
+        showRegistrationInfo(true);
+        setIsLoggedIn(true);
+        setHeaderEmail(email);
+        navigate("/");
       })
-      .catch((error) => {
-        console.log(error);
-        setIsRegistrationSuccessful(false);
+      .catch(() => {
+        showRegistrationInfo(false);
         setShowInfoTooltip(true);
       });
-  };
+  }
 
   const handleLogin = (email, password) => {
     authApi
@@ -166,11 +187,13 @@ function App() {
         setHeaderEmail("");
       });
   };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     setHeaderEmail("");
   };
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
@@ -181,16 +204,17 @@ function App() {
         />
         <Routes>
           <Route
-            path="/sign-up"
+            path="/sign-in"
             element={
               <Login
                 setIsLoggedIn={setIsLoggedIn}
                 handleLogout={handleLogout}
                 setHeaderEmail={setHeaderEmail}
+                onLogin={handleLogin}
               />
             }
           />
-          <Route path="/sign-in" element={<Register />} />
+          <Route path="/sign-up" element={<Register onRegister={handleRegister} showRegistrationInfo={showRegistrationInfo} />} />
           <Route
             path="/"
             element={
@@ -226,11 +250,13 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
         />
-        <InfoTooltip
-          isOpen={showInfoTooltip}
-          onClose={closeAllPopups}
-          isSuccess={isRegistrationSuccessful}
-        />
+       {showInfoTooltip && (
+          <InfoTooltip
+            isOpen={showInfoTooltip}
+            onClose={() => setShowInfoTooltip(false)}
+            isSuccess={isRegistrationSuccessful}
+          />
+        )}
 
         <div className="popup popup_delete-card">
           <div className="popup__container">

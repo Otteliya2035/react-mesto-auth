@@ -1,35 +1,20 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import authApi from "../utils/authApi";
-import InfoTooltip from "../Components/InfoTooltip";
 
-function Register() {
+const Register = ({ onRegister }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isRegistrationSuccessful, setRegistrationSuccessful] = useState(false);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    authApi
-      .register(email, password)
-      .then(() => {
-        setRegistrationSuccessful(true);
-        setEmail("");
-        setPassword("");
-      })
-      .catch((error) => {
-        console.log("Ошибка регистрации:", error);
-      });
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
-  function handleEmailChange(event) {
-    setEmail(event.target.value);
-  }
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
 
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
-  }
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onRegister(email, password);
+  };
   return (
     <div className="register">
       <h2 className="auth__title">Регистрация</h2>
@@ -54,24 +39,12 @@ function Register() {
           />
         </label>
         <br />
-        <button className="auth__button" type="submit">
+        <button type="submit" className="auth__button">
           Зарегистрироваться
         </button>
-        <div className="auth__signin">
-          <Link to="/sign-in">
-            <p className="auth__login-link"> Уже зарегистрированы? Войти</p>
-          </Link>
-        </div>
       </form>
-      {isRegistrationSuccessful && (
-        <InfoTooltip
-          isOpen={true}
-          onClose={() => setRegistrationSuccessful(false)}
-          isSuccess={true}
-        />
-      )}
     </div>
   );
-}
+};
 
 export default Register;
