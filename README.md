@@ -26,4 +26,4 @@
 
 Ссылка на проект
 
-- https://Otteliya2035.github.io/mesto-react/
+- https://Otteliya2035.github.io/react-mesto-auth/
