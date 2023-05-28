@@ -10,3 +10,4 @@ export const ProtectedRoute = ({
     <Navigate to="/sign-in" replace />
   );
 };
+

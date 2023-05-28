@@ -16,7 +16,6 @@ import InfoTooltip from "../Components/InfoTooltip";
 import authApi from "../utils/authApi";
 import { useNavigate } from "react-router-dom";
 
-
 function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
@@ -24,10 +23,10 @@ function App() {
   const [headerEmail, setHeaderEmail] = useState("");
   const navigate = useNavigate();
 
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
+      setIsLoggedIn(true);
       authApi
         .checkToken(token)
         .then((data) => {
@@ -47,7 +46,7 @@ function App() {
         setCards(initialCards);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [isLoggedIn]);
 
   function handleUpdateUser({ name, about }) {
     api
@@ -85,11 +84,9 @@ function App() {
       });
   }
 
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
-    useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
-    useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
 
   const [showInfoTooltip, setShowInfoTooltip] = useState(false);
@@ -100,8 +97,6 @@ function App() {
     setIsRegistrationSuccessful(isSuccess);
     setShowInfoTooltip(true);
   };
-
-
 
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
@@ -164,30 +159,31 @@ function App() {
       .then(() => {
         showRegistrationInfo(true);
         setIsLoggedIn(true);
-        setHeaderEmail(email);
-        navigate("/");
+
+        navigate("/sign-in");
       })
       .catch(() => {
         showRegistrationInfo(false);
         setShowInfoTooltip(true);
       });
   }
-
   const handleLogin = (email, password) => {
     authApi
       .login(email, password)
       .then((data) => {
         localStorage.setItem("token", data.token);
         setIsLoggedIn(true);
-        setHeaderEmail(email);
+        setHeaderEmail(email); 
+        navigate("/");
       })
       .catch((error) => {
         console.log(error);
         setIsLoggedIn(false);
         setHeaderEmail("");
+        setIsRegistrationSuccessful(false);
+        setShowInfoTooltip(true);
       });
   };
-
   const handleLogout = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
@@ -214,7 +210,15 @@ function App() {
               />
             }
           />
-          <Route path="/sign-up" element={<Register onRegister={handleRegister} showRegistrationInfo={showRegistrationInfo} />} />
+          <Route
+            path="/sign-up"
+            element={
+              <Register
+                onRegister={handleRegister}
+                showRegistrationInfo={showRegistrationInfo}
+              />
+            }
+          />
           <Route
             path="/"
             element={
@@ -231,6 +235,17 @@ function App() {
               />
             }
           />
+          <Route
+            path="/"
+            element={
+              isLoggedIn ? (
+                <Navigate to="/" replace />
+              ) : (
+                <Navigate to="/sign-in" replace />
+              )
+            }
+          />
+          <Route path="*" element={<Navigate to={"/sign-in"} />} />
         </Routes>
         <Footer />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
@@ -250,7 +265,7 @@ function App() {
           onClose={closeAllPopups}
           onAddPlace={handleAddPlaceSubmit}
         />
-       {showInfoTooltip && (
+        {showInfoTooltip && (
           <InfoTooltip
             isOpen={showInfoTooltip}
             onClose={() => setShowInfoTooltip(false)}
