@@ -12,7 +12,7 @@ function Header({ isLoggedIn, onSignOut, headerEmail }) {
       </Link>
       {isLoggedIn ? (
         <div className="header__container">
-          <p className="header__email">{headerEmail}</p>
+          <p className="header__email">{isLoggedIn ? headerEmail : ""}</p>
           <Link to="/" className="header__link" onClick={onSignOut}>
             Выйти
           </Link>

@@ -23,15 +23,25 @@ function App() {
   const [headerEmail, setHeaderEmail] = useState("");
   const navigate = useNavigate();
 
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+
+  const [showInfoTooltip, setShowInfoTooltip] = useState(false);
+  const [isRegistrationSuccessful, setIsRegistrationSuccessful] =
+    useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsLoggedIn(true);
       authApi
         .checkToken(token)
-        .then((data) => {
+        .then(({ data }) => {
           setIsLoggedIn(true);
           setHeaderEmail(data.email);
+          navigate("/");
         })
         .catch((error) => {
           console.log(error);
@@ -83,15 +93,6 @@ function App() {
         console.log(err);
       });
   }
-
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
-
-  const [showInfoTooltip, setShowInfoTooltip] = useState(false);
-  const [isRegistrationSuccessful, setIsRegistrationSuccessful] =
-    useState(false);
 
   const showRegistrationInfo = (isSuccess) => {
     setIsRegistrationSuccessful(isSuccess);
@@ -173,7 +174,7 @@ function App() {
       .then((data) => {
         localStorage.setItem("token", data.token);
         setIsLoggedIn(true);
-        setHeaderEmail(email); 
+        setHeaderEmail(email);
         navigate("/");
       })
       .catch((error) => {
@@ -199,17 +200,7 @@ function App() {
           headerEmail={headerEmail}
         />
         <Routes>
-          <Route
-            path="/sign-in"
-            element={
-              <Login
-                setIsLoggedIn={setIsLoggedIn}
-                handleLogout={handleLogout}
-                setHeaderEmail={setHeaderEmail}
-                onLogin={handleLogin}
-              />
-            }
-          />
+          <Route path="/sign-in" element={<Login onLogin={handleLogin} />} />
           <Route
             path="/sign-up"
             element={
